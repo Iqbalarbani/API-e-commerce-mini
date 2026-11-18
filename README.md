@@ -3,6 +3,8 @@
 E-Commerce REST API yang dibangun dengan **FastAPI**, **SQLAlchemy 2.x**, **Alembic**, **Pydantic v2**, dan **PostgreSQL**, sepenuhnya di-container dengan **Docker Compose**. Proyek ini dibuat sebagai portofolio backend dengan arsitektur berlapis (Route -> Service -> Repository) dan penanganan race condition pada stok saat checkout.
 <img width="1917" height="978" alt="image" src="https://github.com/user-attachments/assets/0fb56dd2-ec56-401a-934d-1477f1b3f4a8" />
 
+<img width="1917" height="976" alt="image" src="https://github.com/user-attachments/assets/415615fc-5067-42b6-b55c-30e96e2db1ab" />
+
 ---
 
 ## Deskripsi
@@ -24,6 +26,9 @@ Mini Shop API menyediakan alur e-commerce inti: registrasi & login pengguna (JWT
 - **Order**: riwayat order, detail order, update status oleh admin dengan validasi transisi status.
 - **Health check** dengan verifikasi koneksi database.
 - **Seeder idempoten** (`python -m scripts.seed`) aman dijalankan berulang.
+<img width="1917" height="975" alt="image" src="https://github.com/user-attachments/assets/454aa565-ccad-4ebe-b8c7-043db3d88e28" />
+
+<img width="1917" height="976" alt="image" src="https://github.com/user-attachments/assets/896bb284-b787-4024-918c-070420e1c8f3" />
 
 ## Tech Stack
 
