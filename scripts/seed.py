@@ -17,9 +17,9 @@ from app.core.database import SessionLocal
 from app.core.security import hash_password
 from app.models import Category, Product, User, UserRole
 
-ADMIN_EMAIL = os.getenv("SEED_ADMIN_EMAIL", "admin@minishop.local")
+ADMIN_EMAIL = os.getenv("SEED_ADMIN_EMAIL", "admin@example.com")
 ADMIN_PASSWORD = os.getenv("SEED_ADMIN_PASSWORD", "Admin12345")
-CUSTOMER_EMAIL = os.getenv("SEED_CUSTOMER_EMAIL", "customer@minishop.local")
+CUSTOMER_EMAIL = os.getenv("SEED_CUSTOMER_EMAIL", "customer@example.com")
 CUSTOMER_PASSWORD = os.getenv("SEED_CUSTOMER_PASSWORD", "Customer12345")
 
 CATEGORIES = [

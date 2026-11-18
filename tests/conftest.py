@@ -82,11 +82,21 @@ def db_session(_database: None) -> Generator[Session, None, None]:
 
 
 @pytest.fixture
-def client(db_session: Session) -> Generator[TestClient, None, None]:
-    """FastAPI TestClient with the DB dependency overridden to the test session."""
+def client(_database: None) -> Generator[TestClient, None, None]:
+    """FastAPI TestClient using a fresh DB session per request.
+
+    Each request gets its own session/transaction (mirroring production
+    ``get_db``), so concurrent requests acquire independent connections and
+    real row-level locks. Sharing one session across requests/threads would
+    corrupt SQLAlchemy's unit of work and hide stale-data bugs.
+    """
 
     def _override_get_db() -> Generator[Session, None, None]:
-        yield db_session
+        session = TestingSessionLocal()
+        try:
+            yield session
+        finally:
+            session.close()
 
     app.dependency_overrides[get_db] = _override_get_db
     with TestClient(app) as test_client:

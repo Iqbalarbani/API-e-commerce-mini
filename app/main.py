@@ -1,6 +1,7 @@
 """FastAPI application factory and entry point for Mini Shop API."""
 
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
@@ -10,6 +11,7 @@ from app.api.health import router as health_router
 from app.api.orders import router as orders_router
 from app.api.products import router as products_router
 from app.core.config import get_settings
+from app.core.docs import build_swagger_docs_html
 from app.core.exceptions import register_exception_handlers
 from app.core.rate_limit import limiter
 
@@ -22,10 +24,19 @@ def create_application() -> FastAPI:
         title=settings.APP_NAME,
         version="0.1.0",
         description="Mini Shop API - E-Commerce REST API portfolio project.",
-        docs_url="/docs",
+        docs_url=None,
         redoc_url="/redoc",
         openapi_url="/openapi.json",
     )
+
+    @application.get("/docs", include_in_schema=False)
+    def custom_swagger_ui() -> HTMLResponse:
+        """Serve Swagger UI with a light/dark theme toggle."""
+        html = build_swagger_docs_html(
+            openapi_url=application.openapi_url or "/openapi.json",
+            title=f"{settings.APP_NAME} - Swagger UI",
+        )
+        return HTMLResponse(content=html)
 
     application.state.limiter = limiter
     application.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)

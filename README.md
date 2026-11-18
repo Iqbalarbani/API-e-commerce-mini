@@ -85,9 +85,9 @@ Isi data contoh (idempoten, aman diulang):
 docker compose exec api python -m scripts.seed
 ```
 
-Akun seed default:
-- Admin: `admin@minishop.local` / `Admin12345`
-- Customer: `customer@minishop.local` / `Customer12345`
+Akun seed default (dapat diubah lewat `SEED_*` di `.env`):
+- Admin: `admin@example.com` / `Admin12345`
+- Customer: `customer@example.com` / `Customer12345`
 
 ### Mengecek tabel sudah terbentuk
 
@@ -198,9 +198,16 @@ Cakupan test wajib:
 - checkout sukses (snapshot + stok berkurang)
 - dua checkout bersamaan pada stok terbatas (hanya satu yang sukses)
 
-> **Hasil pengujian (output nyata, lokal tanpa PostgreSQL):**
-> `17 passed, 15 skipped` â€” coverage **74%**.
-> 15 test integration di-skip karena tidak ada instance PostgreSQL di mesin lokal saat dijalankan; itulah yang menutupi `repositories`, `api`, dan `dependencies` sehingga coverage lokal belum mencapai 80%. Di CI (dengan service PostgreSQL) seluruh 32 test berjalan dan menaikkan coverage. Jalankan `pytest --cov=app --cov-report=term-missing` di lingkungan ber-PostgreSQL untuk angka final yang sebenarnya.
+> **Hasil pengujian (output nyata, dijalankan di container dengan PostgreSQL 16):**
+> ```
+> 32 passed, 3 warnings in 16.55s
+> Required test coverage of 80% reached. Total coverage: 85.06%
+> ```
+> Seluruh 32 test (17 unit + 15 integration) lulus dan coverage 85% melewati target 80%. Reproduksi:
+> ```bash
+> docker compose exec -e TEST_DATABASE_URL=postgresql+psycopg://minishop:minishop_secret@db:5432/minishop_test_db \
+>   api pytest --cov=app --cov-report=term-missing --cov-fail-under=80
+> ```
 
 ## CI
 
@@ -218,6 +225,16 @@ Placeholder gambar tersedia di `docs/screenshots/`. Tambahkan screenshot Swagger
 | Swagger UI | `docs/screenshots/swagger.png` |
 | Contoh response produk | `docs/screenshots/products.png` |
 | Hasil coverage | `docs/screenshots/coverage.png` |
+
+## Lisensi
+
+Kode proyek ini dilisensikan di bawah **MIT** (lihat `LICENSE`). Daftar lisensi
+dependensi pihak ketiga beserta kewajibannya ada di `THIRD_PARTY_NOTICES.md`.
+
+> Perhatian: dependensi `psycopg`/`psycopg-binary` berlisensi **LGPL-3.0-only**
+dan `certifi` berlisensi **MPL-2.0**. Keduanya dipakai tanpa modifikasi (menautkan
+secara dinamis), yang umumnya aman untuk penggunaan komersial, tetapi tinjau
+sendiri dengan penasihat hukum sebelum distribusi.
 
 ## Yang Saya Pelajari
 

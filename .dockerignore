@@ -1,0 +1,21 @@
+# VCS
+.git
+.github
+
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+.coverage
+htmlcov/
+
+# Virtualenv
+.venv/
+venv/
+
+# Env & local
+.env
+*.log

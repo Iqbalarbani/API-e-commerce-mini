@@ -48,3 +48,8 @@ htmlcov/
 *.swo
 .DS_Store
 Thumbs.db
+
+# Local scratch files (ad-hoc scripts/logs used during development)
+_*.ps1
+*.log
+login.json
