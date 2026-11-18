@@ -123,3 +123,4 @@ class OrderItem(Base, TimestampMixin):
     product: Mapped["Product"] = relationship(
         back_populates="order_items",
     )
+
