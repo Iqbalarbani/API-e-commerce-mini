@@ -11,6 +11,7 @@ from app.api.health import router as health_router
 from app.api.orders import router as orders_router
 from app.api.products import router as products_router
 from app.core.config import get_settings
+from app.core.dashboard import build_dashboard_html
 from app.core.docs import build_swagger_docs_html
 from app.core.exceptions import register_exception_handlers
 from app.core.rate_limit import limiter
@@ -28,6 +29,19 @@ def create_application() -> FastAPI:
         redoc_url="/redoc",
         openapi_url="/openapi.json",
     )
+
+    @application.get("/dashboard", include_in_schema=False)
+    def dashboard() -> HTMLResponse:
+        """Landing dashboard listing every built feature."""
+        return HTMLResponse(content=build_dashboard_html(app_name=settings.APP_NAME))
+
+    @application.get("/", include_in_schema=False)
+    def root_redirect() -> HTMLResponse:
+        """Send the root path to the dashboard."""
+        return HTMLResponse(
+            content='<meta http-equiv="refresh" content="0; url=/dashboard">'
+            '<a href="/dashboard">Buka dashboard</a>'
+        )
 
     @application.get("/docs", include_in_schema=False)
     def custom_swagger_ui() -> HTMLResponse:
